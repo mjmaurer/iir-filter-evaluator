@@ -1,0 +1,6 @@
+[submodule "ext/JUCE"]
+	path = ext/JUCE
+	url = https://github.com/juce-framework/JUCE.git
+[submodule "ext/react-juce"]
+	path = ext/react-juce
+	url = https://github.com/nick-thompson/react-juce.git
