@@ -17,15 +17,103 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
     AudioProcessorValueTreeState::ParameterLayout params (
         std::make_unique<AudioParameterFloat>(
-            "MainGain",
-            "Gain",
-            NormalisableRange<float>(0.0, 1.0),
-            0.8,
+            "a0",
+            "a0",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
             String(),
             AudioProcessorParameter::genericParameter,
-            [](float value, int /* maxLength */) {
-                return String(Decibels::gainToDecibels(value), 1) + "dB";
-            },
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "a1",
+            "a1",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "a2",
+            "a2",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "a3",
+            "a3",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "a4",
+            "a4",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "b0",
+            "b0",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "b1",
+            "b1",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "b2",
+            "b2",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "b3",
+            "b3",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
+            nullptr
+        ),
+        std::make_unique<AudioParameterFloat>(
+            "b4",
+            "b4",
+            NormalisableRange<float>(-10000.0, 10000.0),
+            0.0,
+            String(),
+            AudioProcessorParameter::genericParameter,
+            nullptr,
             nullptr
         ),
         std::make_unique<AudioParameterBool>(
@@ -157,7 +245,8 @@ void GainPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
         buffer.clear (i, 0, buffer.getNumSamples());
 
     // Our intense dsp processing
-    gain.setTargetValue(*params.getRawParameterValue("MainGain"));
+    // gain.setTargetValue(*params.getRawParameterValue("MainGain"));
+    gain.applyGain(buffer, buffer.getNumSamples());
     gain.applyGain(buffer, buffer.getNumSamples());
 
     if (auto *muteParam  = dynamic_cast<AudioParameterBool*>(params.getParameter("MainMute")))

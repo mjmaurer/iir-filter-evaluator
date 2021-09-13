@@ -58,8 +58,6 @@ class App extends Component {
 
     const logo_url =
       "https://raw.githubusercontent.com/nick-thompson/react-juce/master/examples/GainPlugin/jsui/src/logo.png";
-    //const logo_png = require('./logo.png');
-    //const logo_svg = require('./logo.svg');
 
     return (
       <View {...styles.container}>
@@ -70,7 +68,7 @@ class App extends Component {
             onError={imageError}
             {...styles.logo}
           />
-          <Knob paramId="MainGain" />
+          {/* <Knob paramId="MainGain" /> */}
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
           <ParameterToggleButton
@@ -80,7 +78,7 @@ class App extends Component {
             {...styles.mute_button}
           >
             <Text color={muteTextColor} {...styles.mute_button_text}>
-              MUTE
+              MUTED
             </Text>
           </ParameterToggleButton>
         </View>
