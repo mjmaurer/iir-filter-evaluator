@@ -4,6 +4,7 @@ import Knob from "./Knob";
 import ParameterToggleButton from "./ParameterToggleButton";
 import React, { Component } from "react";
 import { Canvas, Image, Text, View } from "react-juce";
+import ParameterCoefficient from "./ParameterCoefficient";
 
 function animatedDraw(ctx) {
   let now = Date.now() / 10;
@@ -69,9 +70,21 @@ class App extends Component {
             {...styles.logo}
           /> */}
           {/* <Knob paramId="MainGain" /> */}
+          <View {...styles.coeffContainer}>
+            <ParameterCoefficient
+              paramId="MainMute"
+              onToggled={this._onMuteToggled}
+              background-color={muteBackgroundColor}
+              {...styles.mute_button}
+            >
+              <Text color={muteTextColor} {...styles.mute_button_text}>
+                MUTED
+              </Text>
+            </ParameterCoefficient>
+          </View>
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
-          <ParameterToggleButton
+          {/* <ParameterToggleButton
             paramId="MainMute"
             onToggled={this._onMuteToggled}
             background-color={muteBackgroundColor}
@@ -80,7 +93,7 @@ class App extends Component {
             <Text color={muteTextColor} {...styles.mute_button_text}>
               MUTED
             </Text>
-          </ParameterToggleButton>
+          </ParameterToggleButton> */}
         </View>
       </View>
     );
@@ -104,6 +117,12 @@ const styles = {
     padding: 24.0,
     maxWidth: 600,
     aspectRatio: 400.0 / 240.0,
+  },
+  coeffContainer: {
+    width: "100%",
+    flex: 1.0,
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
     flex: 0.0,
