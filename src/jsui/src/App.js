@@ -62,12 +62,12 @@ class App extends Component {
     return (
       <View {...styles.container}>
         <View {...styles.content}>
-          <Image
+          {/* <Image
             source={logo_url}
             onLoad={imageLoaded}
             onError={imageError}
             {...styles.logo}
-          />
+          /> */}
           {/* <Knob paramId="MainGain" /> */}
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
