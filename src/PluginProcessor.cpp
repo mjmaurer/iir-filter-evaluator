@@ -247,7 +247,6 @@ void GainPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     // Our intense dsp processing
     // gain.setTargetValue(*params.getRawParameterValue("MainGain"));
     gain.applyGain(buffer, buffer.getNumSamples());
-    gain.applyGain(buffer, buffer.getNumSamples());
 
     if (auto *muteParam  = dynamic_cast<AudioParameterBool*>(params.getParameter("MainMute")))
     {
