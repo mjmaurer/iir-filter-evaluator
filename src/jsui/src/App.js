@@ -3,7 +3,7 @@ import Meter from "./Meter";
 import Knob from "./Knob";
 import ParameterToggleButton from "./ParameterToggleButton";
 import React, { Component } from "react";
-import { Canvas, Image, Text, View } from "react-juce";
+import { Canvas, Image, Text, TextInput, View } from "react-juce";
 import ParameterCoefficient from "./ParameterCoefficient";
 
 function animatedDraw(ctx) {
@@ -81,6 +81,11 @@ class App extends Component {
                 MUTED
               </Text>
             </ParameterCoefficient>
+            <TextInput
+              placeholder="init message"
+              value="init"
+              {...styles.text_input}
+            ></TextInput>
           </View>
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
@@ -123,6 +128,16 @@ const styles = {
     flex: 1.0,
     justifyContent: "center",
     alignItems: "center",
+  },
+  text_input: {
+    backgroundColor: "ff303030",
+    color: "ff66FDCF",
+    fontSize: 15.0,
+    fontFamily: "Menlo",
+    fontStyle: Text.FontStyleFlags.bold,
+    "placeholder-color": "ffAAAAAA",
+    height: 30,
+    width: 200,
   },
   logo: {
     flex: 0.0,
