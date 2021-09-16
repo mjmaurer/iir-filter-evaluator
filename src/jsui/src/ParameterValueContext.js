@@ -8,22 +8,23 @@ import React, {
 import { EventBridge } from "react-juce";
 
 export const ParamIds = {
-  MainGain: "MainGain",
   MainMute: "MainMute",
+  a0: "a0",
+  a1: "a1",
+  a2: "a2",
+  a3: "a3",
+  a4: "a4",
+  b0: "b0",
+  b1: "b1",
+  b2: "b2",
+  b3: "b3",
+  b4: "b4",
 };
 
-const defaultValues = {
-  MainGain: {
-    defaultValue: 0.0,
-    currentValue: 0.0,
-    stringValue: "loading",
-  },
-  MainMute: {
-    defaultValue: false,
-    currentValue: false,
-    stringValue: "loading",
-  },
-};
+const defaultValues = Object.keys(ParamIds).reduce((acc, key) => {
+  acc[key] = {};
+  return acc;
+}, {});
 
 export const ParameterValueContext = createContext(defaultValues);
 

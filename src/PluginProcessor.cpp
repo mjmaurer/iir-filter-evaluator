@@ -10,12 +10,10 @@
 
 #include "PluginProcessor.h"
 
-
 //==============================================================================
 /** Helper function for generating the parameter layout. */
-AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
-{
-    AudioProcessorValueTreeState::ParameterLayout params (
+AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
+    AudioProcessorValueTreeState::ParameterLayout params(
         std::make_unique<AudioParameterFloat>(
             "a0",
             "a0",
@@ -24,8 +22,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "a1",
             "a1",
@@ -34,8 +31,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "a2",
             "a2",
@@ -44,8 +40,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "a3",
             "a3",
@@ -54,8 +49,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "a4",
             "a4",
@@ -64,8 +58,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "b0",
             "b0",
@@ -74,8 +67,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "b1",
             "b1",
@@ -84,8 +76,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "b2",
             "b2",
@@ -94,8 +85,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "b3",
             "b3",
@@ -104,8 +94,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
+            nullptr),
         std::make_unique<AudioParameterFloat>(
             "b4",
             "b4",
@@ -114,125 +103,104 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
-            nullptr
-        ),
-        std::make_unique<AudioParameterBool>(
-            "MainMute",
-            "Mute",
-            false
-       )
-    );
+            nullptr),
+        std::make_unique<AudioParameterBool>("MainMute", "Mute", false));
 
     return params;
 }
 
 //==============================================================================
 GainPluginAudioProcessor::GainPluginAudioProcessor()
-     : AudioProcessor (BusesProperties()
-                       .withInput  ("Input",  AudioChannelSet::stereo(), true)
-                       .withOutput ("Output", AudioChannelSet::stereo(), true)),
-       params(*this, nullptr, JucePlugin_Name, createParameterLayout())
-{
-}
+    : AudioProcessor(
+          BusesProperties()
+              .withInput("Input", AudioChannelSet::stereo(), true)
+              .withOutput("Output", AudioChannelSet::stereo(), true)),
+      params(*this, nullptr, JucePlugin_Name, createParameterLayout()) {}
 
-GainPluginAudioProcessor::~GainPluginAudioProcessor()
-{
-    stopTimer();
-}
+GainPluginAudioProcessor::~GainPluginAudioProcessor() { stopTimer(); }
 
 //==============================================================================
-const String GainPluginAudioProcessor::getName() const
-{
+const String GainPluginAudioProcessor::getName() const {
     return JucePlugin_Name;
 }
 
-bool GainPluginAudioProcessor::acceptsMidi() const
-{
-   #if JucePlugin_WantsMidiInput
+bool GainPluginAudioProcessor::acceptsMidi() const {
+#if JucePlugin_WantsMidiInput
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
-bool GainPluginAudioProcessor::producesMidi() const
-{
-   #if JucePlugin_ProducesMidiOutput
+bool GainPluginAudioProcessor::producesMidi() const {
+#if JucePlugin_ProducesMidiOutput
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
-bool GainPluginAudioProcessor::isMidiEffect() const
-{
-   #if JucePlugin_IsMidiEffect
+bool GainPluginAudioProcessor::isMidiEffect() const {
+#if JucePlugin_IsMidiEffect
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
-double GainPluginAudioProcessor::getTailLengthSeconds() const
-{
-    return 0.0;
+double GainPluginAudioProcessor::getTailLengthSeconds() const { return 0.0; }
+
+int GainPluginAudioProcessor::getNumPrograms() {
+    return 1; // NB: some hosts don't cope very well if you tell them there are 0
+              // programs, so this should be at least 1, even if you're not really
+              // implementing programs.
 }
 
-int GainPluginAudioProcessor::getNumPrograms()
-{
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
-}
+int GainPluginAudioProcessor::getCurrentProgram() { return 0; }
 
-int GainPluginAudioProcessor::getCurrentProgram()
-{
-    return 0;
+void GainPluginAudioProcessor::setCurrentProgram(int /* index */) {}
+const String GainPluginAudioProcessor::getProgramName(int /* index */) {
+    return {};
 }
-
-void GainPluginAudioProcessor::setCurrentProgram (int /* index */) {}
-const String GainPluginAudioProcessor::getProgramName (int /* index */) { return {}; }
-void GainPluginAudioProcessor::changeProgramName (int /* index */, const String& /* newName */) {}
+void GainPluginAudioProcessor::changeProgramName(int /* index */, const String& /* newName */) {}
 
 //==============================================================================
-void GainPluginAudioProcessor::prepareToPlay (double sampleRate, int /* samplesPerBlock */)
-{
+void GainPluginAudioProcessor::prepareToPlay(double sampleRate, int /* samplesPerBlock */) {
     gain.reset(sampleRate, 0.02);
 }
 
-void GainPluginAudioProcessor::releaseResources()
-{
+void GainPluginAudioProcessor::releaseResources() {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool GainPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
-{
-  #if JucePlugin_IsMidiEffect
-    ignoreUnused (layouts);
+bool GainPluginAudioProcessor::isBusesLayoutSupported(
+    const BusesLayout& layouts) const {
+    #if JucePlugin_IsMidiEffect
+    ignoreUnused(layouts);
     return true;
-  #else
+    #else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
-    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
+    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono() &&
+        layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
         return false;
 
-    // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
+            // This checks if the input layout matches the output layout
+        #if !JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
-   #endif
+        #endif
 
     return true;
-  #endif
+    #endif
 }
 #endif
 
-void GainPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& /* midiMessages */)
-{
+void GainPluginAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& /* midiMessages */) {
     ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // In case we have more outputs than inputs, this code clears any output
@@ -242,31 +210,29 @@ void GainPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
 
     // Our intense dsp processing
     // gain.setTargetValue(*params.getRawParameterValue("MainGain"));
     gain.applyGain(buffer, buffer.getNumSamples());
 
-    if (auto *muteParam  = dynamic_cast<AudioParameterBool*>(params.getParameter("MainMute")))
-    {
+    if (auto* muteParam =
+            dynamic_cast<AudioParameterBool*>(params.getParameter("MainMute"))) {
         bool muted = muteParam->get();
         if (muted)
             buffer.applyGain(0.0f);
     }
 
     // Read current block gain peak value
-    gainPeakValue = buffer.getMagnitude (0, buffer.getNumSamples());
+    gainPeakValue = buffer.getMagnitude(0, buffer.getNumSamples());
 }
 
 //==============================================================================
-bool GainPluginAudioProcessor::hasEditor() const
-{
+bool GainPluginAudioProcessor::hasEditor() const {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* GainPluginAudioProcessor::createEditor()
-{
+AudioProcessorEditor* GainPluginAudioProcessor::createEditor() {
     // The GainPlugin example uses the GenericEditor, which is a default
     // AudioProcessorEditor provided that will automatically bootstrap
     // your React root, install some native method hooks for parameter interaction
@@ -281,7 +247,7 @@ AudioProcessorEditor* GainPluginAudioProcessor::createEditor()
     editor->setResizable(true, true);
     editor->setResizeLimits(400, 240, 400 * 2, 240 * 2);
     editor->getConstrainer()->setFixedAspectRatio(400.0 / 240.0);
-    editor->setSize (400, 240);
+    editor->setSize(400, 240);
 
     // Start timer to dispatch gainPeakValues event to update Meter values
     startTimer(100);
@@ -289,36 +255,30 @@ AudioProcessorEditor* GainPluginAudioProcessor::createEditor()
     return editor;
 }
 
-void GainPluginAudioProcessor::timerCallback()
-{
-    if (auto* editor = dynamic_cast<reactjuce::GenericEditor*>(getActiveEditor()))
-    {
+void GainPluginAudioProcessor::timerCallback() {
+    if (auto* editor =
+            dynamic_cast<reactjuce::GenericEditor*>(getActiveEditor())) {
         // Dispatch gainPeakValues event used by Meter React component
-        editor->getReactAppRoot().dispatchEvent(
-            "gainPeakValues",
-            static_cast<float>(gainPeakValue),
-            static_cast<float>(gainPeakValue)
-        );
+        editor->getReactAppRoot().dispatchEvent("gainPeakValues", static_cast<float>(gainPeakValue), static_cast<float>(gainPeakValue));
     }
 }
 
 //==============================================================================
-void GainPluginAudioProcessor::getStateInformation (MemoryBlock& /* destData */)
-{
+void GainPluginAudioProcessor::getStateInformation(
+    MemoryBlock& /* destData */) {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void GainPluginAudioProcessor::setStateInformation (const void* /* data */, int /* sizeInBytes */)
-{
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+void GainPluginAudioProcessor::setStateInformation(const void* /* data */, int /* sizeInBytes */) {
+    // You should use this method to restore your parameters from this memory
+    // block, whose contents will have been created by the getStateInformation()
+    // call.
 }
 
 //==============================================================================
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
-{
+AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
     return new GainPluginAudioProcessor();
 }

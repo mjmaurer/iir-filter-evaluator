@@ -1,10 +1,11 @@
 // import AnimatedFlexBoxExample from "./AnimatedFlexBox";
 import Meter from "./Meter";
 import Knob from "./Knob";
-import ParameterToggleButton from "./ParameterToggleButton";
 import React, { Component } from "react";
 import { Canvas, Image, Text, TextInput, View } from "react-juce";
+import ParameterToggleButton from "./ParameterToggleButton";
 import ParameterCoefficient from "./ParameterCoefficient";
+import { ParamIds } from "./ParameterValueContext";
 
 function animatedDraw(ctx) {
   let now = Date.now() / 10;
@@ -26,83 +27,38 @@ function imageError(error) {
   console.log(error.message);
 }
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this._onMuteToggled = this._onMuteToggled.bind(this);
+function App() {
+  // Uncomment here to watch the animated flex box example in action
+  // return (
+  //   <View {...styles.container}>
+  //     <AnimatedFlexBoxExample />
+  //   </View>
+  // );
 
-    this.state = {
-      muted: false,
-    };
-  }
+  const logo_url =
+    "https://raw.githubusercontent.com/nick-thompson/react-juce/master/examples/GainPlugin/jsui/src/logo.png";
 
-  _onMuteToggled(toggled) {
-    this.setState({
-      muted: toggled,
-    });
-  }
-
-  render() {
-    // Uncomment here to watch the animated flex box example in action
-    // return (
-    //   <View {...styles.container}>
-    //     <AnimatedFlexBoxExample />
-    //   </View>
-    // );
-
-    const muteBackgroundColor = this.state.muted
-      ? "#66FDCF"
-      : "hsla(162, 97%, 70%, 0)";
-    const muteTextColor = this.state.muted
-      ? "#17191f"
-      : "hsla(162, 97%, 70%, 1)";
-
-    const logo_url =
-      "https://raw.githubusercontent.com/nick-thompson/react-juce/master/examples/GainPlugin/jsui/src/logo.png";
-
-    return (
-      <View {...styles.container}>
-        <View {...styles.content}>
-          {/* <Image
+  return (
+    <View {...styles.container}>
+      <View {...styles.content}>
+        {/* <Image
             source={logo_url}
             onLoad={imageLoaded}
             onError={imageError}
             {...styles.logo}
           /> */}
-          {/* <Knob paramId="MainGain" /> */}
-          <View {...styles.coeffContainer}>
-            <ParameterCoefficient
-              paramId="MainMute"
-              onToggled={this._onMuteToggled}
-              background-color={muteBackgroundColor}
-              {...styles.mute_button}
-            >
-              <Text color={muteTextColor} {...styles.mute_button_text}>
-                MUTED
-              </Text>
-            </ParameterCoefficient>
-            <TextInput
-              placeholder="init message"
-              value="init"
-              {...styles.text_input}
-            ></TextInput>
-          </View>
-          <Meter {...styles.meter} />
-          <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
-          {/* <ParameterToggleButton
-            paramId="MainMute"
-            onToggled={this._onMuteToggled}
-            background-color={muteBackgroundColor}
-            {...styles.mute_button}
-          >
-            <Text color={muteTextColor} {...styles.mute_button_text}>
-              MUTED
-            </Text>
-          </ParameterToggleButton> */}
+        {/* <Knob paramId="MainGain" /> */}
+        <View {...styles.coeffContainer}>
+          <ParameterCoefficient paramId={ParamIds.a0}>a0</ParameterCoefficient>
         </View>
+        <ParameterToggleButton paramId={ParamIds.MainMute}>
+          MUTED
+        </ParameterToggleButton>
+        <Meter {...styles.meter} />
+        <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 const styles = {
@@ -129,16 +85,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
   },
-  text_input: {
-    backgroundColor: "ff303030",
-    color: "ff66FDCF",
-    fontSize: 15.0,
-    fontFamily: "Menlo",
-    fontStyle: Text.FontStyleFlags.bold,
-    "placeholder-color": "ffAAAAAA",
-    height: 30,
-    width: 200,
-  },
   logo: {
     flex: 0.0,
     width: "80%",
@@ -155,23 +101,6 @@ const styles = {
     width: 100.0,
     height: 2,
     marginTop: 10,
-  },
-  mute_button: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 5.0,
-    borderWidth: 2.0,
-    borderColor: "rgba(102, 253, 207, 1)",
-    marginTop: 10,
-    minWidth: 30.0,
-    minHeight: 30.0,
-    width: "20%",
-    height: "17.5%",
-  },
-  mute_button_text: {
-    fontSize: 20.0,
-    lineSpacing: 1.6,
-    fontStyle: Text.FontStyleFlags.bold,
   },
 };
 

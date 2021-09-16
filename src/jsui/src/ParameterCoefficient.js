@@ -1,68 +1,24 @@
-import ParameterValueStore from "./ParameterValueStore";
 import React, { Component, useState, useEffect, memo } from "react";
-import { Button, TextInput } from "react-juce";
+import { Button, Text, TextInput } from "react-juce";
 import {
   beginParameterChangeGesture,
   endParameterChangeGesture,
   setParameterValueNotifyingHost,
 } from "./nativeMethods";
+import { useParameter } from "./ParameterValueContext";
 
 function ParameterCoefficient(props) {
-  const { paramId, onToggled, children, ...other } = props;
+  const { paramId, children } = props;
+  const { currentValue } = useParameter(paramId);
 
-  const paramState = ParameterValueStore.getParameterState(paramId);
-  const initialDefaultValue =
-    typeof paramState.defaultValue === "number" ? paramState.defaultValue : 0.0;
+  const muteBackgroundColor = currentValue
+    ? "#66FDCF"
+    : "hsla(162, 97%, 70%, 0)";
+  const muteTextColor = currentValue ? "#17191f" : "hsla(162, 97%, 70%, 1)";
 
-  const initialValue =
-    typeof paramState.currentValue === "number" ? paramState.currentValue : 0.0;
-
-  const [defaultValue, setDefaultValue] = useState(initialDefaultValue);
-  const [value, setValue] = useState(initialValue);
   const hoverBorderColor = "#66CFFD";
   const defaultBorderColor = "#66FDCF";
   const [borderColor, setBorderColor] = useState(defaultBorderColor);
-
-  const onParameterValueChange = (updatedParamId) => {
-    const shouldUpdate =
-      typeof paramId === "string" &&
-      paramId.length > 0 &&
-      paramId === updatedParamId;
-
-    if (shouldUpdate) {
-      const state = ParameterValueStore.getParameterState(paramId);
-
-      const newDefaultValue = state.defaultValue;
-      const newValue = state.currentValue;
-
-      setDefaultValue(newDefaultValue);
-      setValue(newValue);
-
-      if (typeof onToggled === "function") {
-        onToggled(newValue !== 0.0);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (typeof onToggled === "function") {
-      console.log("here");
-      onToggled(initialValue !== 0.0);
-    }
-  }, [onToggled]);
-
-  useEffect(() => {
-    ParameterValueStore.addListener(
-      ParameterValueStore.CHANGE_EVENT,
-      onParameterValueChange
-    );
-    return () => {
-      ParameterValueStore.removeListener(
-        ParameterValueStore.CHANGE_EVENT,
-        onParameterValueChange
-      );
-    };
-  }, []);
 
   const handleEnter = (e) => {
     beginParameterChangeGesture(paramId);
@@ -75,25 +31,35 @@ function ParameterCoefficient(props) {
   };
 
   const handleClick = (e) => {
-    const newValue = value === 0.0 ? 1.0 : 0.0;
-    setValue(newValue);
+    setParameterValueNotifyingHost(paramId, !currentValue);
+  };
 
-    if (typeof paramId === "string" && paramId.length > 0) {
-      setParameterValueNotifyingHost(paramId, newValue);
-    }
-
-    if (typeof onToggled === "function") {
-      onToggled(newValue !== 0.0);
-    }
+  const onInput = (event) => {
+    console.log(`onInput: ${event.value}`);
+    console.log(currentValue);
   };
 
   return (
     <TextInput
       placeholder="init message"
       value="init"
+      onInput={onInput}
       {...styles.text_input}
     ></TextInput>
   );
 }
+
+const styles = {
+  text_input: {
+    backgroundColor: "ff303030",
+    color: "ff66FDCF",
+    fontSize: 15.0,
+    fontFamily: "Menlo",
+    fontStyle: Text.FontStyleFlags.bold,
+    "placeholder-color": "ffAAAAAA",
+    height: 30,
+    width: 75,
+  },
+};
 
 export default memo(ParameterCoefficient);
