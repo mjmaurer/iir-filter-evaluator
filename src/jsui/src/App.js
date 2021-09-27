@@ -6,6 +6,7 @@ import { Canvas, Image, Text, TextInput, View } from "react-juce";
 import ParameterToggleButton from "./ParameterToggleButton";
 import ParameterCoefficient from "./ParameterCoefficient";
 import { ParamIds } from "./ParameterValueContext";
+import TransferFunction from "./TransferFunction";
 
 function animatedDraw(ctx) {
   let now = Date.now() / 10;
@@ -48,14 +49,30 @@ function App() {
             {...styles.logo}
           /> */}
         {/* <Knob paramId="MainGain" /> */}
+        <TransferFunction />
         <View {...styles.coeffContainer}>
-          <ParameterCoefficient paramId={ParamIds.a0}>a0</ParameterCoefficient>
+          <ParameterCoefficient readonly paramId={ParamIds.a0}>
+            a0
+          </ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.a1}>a1</ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.a2}>a2</ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.a3}>a3</ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.a4}>a4</ParameterCoefficient>
+        </View>
+        <View {...styles.coeffContainer}>
+          <ParameterCoefficient readonly paramId={ParamIds.b0}>
+            b0
+          </ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.b1}>b1</ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.b2}>b2</ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.b3}>b3</ParameterCoefficient>
+          <ParameterCoefficient paramId={ParamIds.b4}>b4</ParameterCoefficient>
         </View>
         <ParameterToggleButton paramId={ParamIds.MainMute}>
           MUTED
         </ParameterToggleButton>
-        <Meter {...styles.meter} />
-        <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
+        {/* <Meter {...styles.meter} />
+        <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} /> */}
       </View>
     </View>
   );
@@ -73,10 +90,10 @@ const styles = {
   content: {
     flex: 1.0,
     flexDirection: "column",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
-    padding: 24.0,
-    maxWidth: 600,
+    padding: 5.0,
+    // maxWidth: 600,
     aspectRatio: 400.0 / 240.0,
   },
   coeffContainer: {
@@ -84,12 +101,6 @@ const styles = {
     flex: 1.0,
     justifyContent: "center",
     alignItems: "center",
-  },
-  logo: {
-    flex: 0.0,
-    width: "80%",
-    aspectRatio: 281.6 / 35.0,
-    placement: Image.PlacementFlags.centred,
   },
   meter: {
     flex: 0.0,

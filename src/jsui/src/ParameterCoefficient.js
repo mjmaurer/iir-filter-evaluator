@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect, memo } from "react";
-import { Button, Text, TextInput } from "react-juce";
+import { Button, Text, TextInput, View } from "react-juce";
 import {
   beginParameterChangeGesture,
   endParameterChangeGesture,
@@ -8,8 +8,17 @@ import {
 import { useParameter } from "./ParameterValueContext";
 
 function ParameterCoefficient(props) {
-  const { paramId, children } = props;
-  const { currentValue } = useParameter(paramId);
+  const { paramId, readonly } = props;
+  const { currentValue, defaultValue } = useParameter(paramId);
+  const [input, setInput] = useState(defaultValue);
+
+  const denormalize = (normValue) => {
+    return normValue * 4 - 2;
+  };
+
+  useEffect(() => {
+    setInput(denormalize(currentValue).toString());
+  }, [currentValue]);
 
   const muteBackgroundColor = currentValue
     ? "#66FDCF"
@@ -35,17 +44,20 @@ function ParameterCoefficient(props) {
   };
 
   const onInput = (event) => {
-    console.log(`onInput: ${event.value}`);
-    console.log(currentValue);
+    setInput(event.value.replace(/[^\d.-]/g, ""));
   };
 
   return (
-    <TextInput
-      placeholder="init message"
-      value="init"
-      onInput={onInput}
-      {...styles.text_input}
-    ></TextInput>
+    <View {...styles.wrapper}>
+      <TextInput
+        placeholder={currentValue ? currentValue.toString() : ""}
+        value={input ? input.toString() : ""}
+        onInput={onInput}
+        readonly={readonly}
+        {...styles.text_input}
+      ></TextInput>
+      <Text {...styles.text}>{paramId}</Text>
+    </View>
   );
 }
 
@@ -59,6 +71,20 @@ const styles = {
     "placeholder-color": "ffAAAAAA",
     height: 30,
     width: 75,
+    justification: 36,
+  },
+  text: {
+    color: "white",
+    fontSize: 17.0,
+    fontFamily: "Menlo",
+    marginTop: 4,
+  },
+  wrapper: {
+    flex: 1.0,
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
+    maxWidth: 600,
   },
 };
 

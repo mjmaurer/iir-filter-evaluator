@@ -17,8 +17,8 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "a0",
             "a0",
-            NormalisableRange<float>(-10000.0, 10000.0),
-            0.0,
+            NormalisableRange<float>(-2.0, 2.0),
+            1.0,
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
@@ -26,7 +26,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "a1",
             "a1",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -35,7 +35,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "a2",
             "a2",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -44,7 +44,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "a3",
             "a3",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -53,7 +53,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "a4",
             "a4",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -62,8 +62,8 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "b0",
             "b0",
-            NormalisableRange<float>(-10000.0, 10000.0),
-            0.0,
+            NormalisableRange<float>(-2.0, 2.0),
+            1.0,
             String(),
             AudioProcessorParameter::genericParameter,
             nullptr,
@@ -71,7 +71,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "b1",
             "b1",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -80,7 +80,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "b2",
             "b2",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -89,7 +89,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "b3",
             "b3",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -98,7 +98,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         std::make_unique<AudioParameterFloat>(
             "b4",
             "b4",
-            NormalisableRange<float>(-10000.0, 10000.0),
+            NormalisableRange<float>(-2.0, 2.0),
             0.0,
             String(),
             AudioProcessorParameter::genericParameter,
@@ -245,8 +245,8 @@ AudioProcessorEditor* GainPluginAudioProcessor::createEditor() {
     auto* editor = new reactjuce::GenericEditor(*this, bundle);
 
     editor->setResizable(true, true);
-    editor->setResizeLimits(400, 240, 400 * 2, 240 * 2);
-    editor->getConstrainer()->setFixedAspectRatio(400.0 / 240.0);
+    // editor->setResizeLimits(400, 240, 400 * 2, 240 * 2);
+    // editor->getConstrainer()->setFixedAspectRatio(400.0 / 240.0);
     editor->setSize(400, 240);
 
     // Start timer to dispatch gainPeakValues event to update Meter values
