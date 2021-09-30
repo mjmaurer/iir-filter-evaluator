@@ -43,16 +43,35 @@ function ParameterCoefficient(props) {
     setParameterValueNotifyingHost(paramId, !currentValue);
   };
 
+  const sanitize = (input) => {
+    let index = 0; // Used to remove extra '.'s
+    return input
+      .replace(/[^\d.-]/g, "")
+      .replace(/(?!^)-/g, "")
+      .replace(/\./g, (item) => (!index++ ? item : ""));
+  };
+
   const onInput = (event) => {
-    setInput(event.value.replace(/[^\d.-]/g, ""));
+    setInput(sanitize(event.value));
   };
 
   return (
-    <View {...styles.wrapper}>
+    <View
+      onFocusIn={(e) => {
+        console.log(e);
+      }}
+      {...styles.wrapper}
+    >
       <TextInput
         placeholder={currentValue ? currentValue.toString() : ""}
         value={input ? input.toString() : ""}
         onInput={onInput}
+        onMouseDown={(e) => {
+          console.log(e);
+        }}
+        onMouseUp={(e) => {
+          console.log(e);
+        }}
         readonly={readonly}
         {...styles.text_input}
       ></TextInput>

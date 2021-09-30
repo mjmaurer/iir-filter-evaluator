@@ -37,7 +37,6 @@ const styles = {
     width: "20%",
     aspectRatio: 281.6 / 35.0,
     placement: Image.PlacementFlags.centred,
-
   },
 };
 
